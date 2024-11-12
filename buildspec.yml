@@ -6,18 +6,18 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 200901485389.dkr.ecr.us-east-1.amazonaws.com
-      - REPOSITORY_URI=200901485389.dkr.ecr.us-east-1.amazonaws.com/$IMAGE_REPO_NAME
+      - REPOSITORY_URI=200901485389.dkr.ecr.us-east-1.amazonaws.com/sample-app
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t 200901485389.dkr.ecr.us-east-1.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG .
-      - docker tag 200901485389.dkr.ecr.us-east-1.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG 200901485389.dkr.ecr.us-east-1.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - docker build -t 200901485389.dkr.ecr.us-east-1.amazonaws.com/sample-app:latest .
+      - docker tag 200901485389.dkr.ecr.us-east-1.amazonaws.com/sample-app:latest 200901485389.dkr.ecr.us-east-1.amazonaws.com/sample-app:latest
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push 200901485389.dkr.ecr.us-east-1.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - docker push 200901485389.dkr.ecr.us-east-1.amazonaws.com/sample-app:latest
       - docker push 200901485389.dkr.ecr.us-east-1.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
       - echo Writing image definitions file...
       - printf '[{"name":"%s","imageUri":"%s"}]' $CONTAINER_NAME 200901485389.dkr.ecr.us-east-1.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG > imagedefinitions.json
